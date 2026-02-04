@@ -6,6 +6,7 @@ import pandas as pd
 from layered_config_tree import LayeredConfigTree
 from loguru import logger
 from packaging.version import parse
+from tqdm.auto import tqdm
 
 from pseudopeople import __version__ as psp_version
 from pseudopeople.configuration import get_configuration
@@ -16,7 +17,6 @@ from pseudopeople.dtypes import DtypeNames
 from pseudopeople.exceptions import DataSourceError
 from pseudopeople.loader import load_standard_dataset
 from pseudopeople.noise import noise_dataset
-from pseudopeople.progressbar import tqdm
 from pseudopeople.schema_entities import COLUMNS, DATASETS, Dataset
 from pseudopeople.utilities import (
     PANDAS_ENGINE,

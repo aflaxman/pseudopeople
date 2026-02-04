@@ -16,11 +16,11 @@ from typing import Any
 
 import pandas as pd
 from layered_config_tree import LayeredConfigTree
+from tqdm.auto import tqdm
 
 from pseudopeople.configuration import Keys
 from pseudopeople.entity_types import ColumnNoiseType, RowNoiseType
 from pseudopeople.noise_entities import NOISE_TYPES
-from pseudopeople.progressbar import tqdm
 from pseudopeople.schema_entities import COLUMNS, Dataset
 from pseudopeople.utilities import get_randomness_stream
 
