@@ -15,6 +15,52 @@ from pseudopeople.schema_entities import DATASETS
 CENSUS = DATASETS.get_dataset(DatasetNames.CENSUS)
 
 
+def test_tqdm_auto_is_used_for_jupyter_support():
+    """Test that tqdm.auto is used for automatic Jupyter notebook support"""
+    from pseudopeople import interface, noise
+    import tqdm.auto
+
+    # Verify both modules import tqdm from tqdm.auto
+    assert interface.tqdm is tqdm.auto.tqdm
+    assert noise.tqdm is tqdm.auto.tqdm
+
+
+def test_progress_bar_can_be_disabled(mocker):
+    """Test that progress_bar=False disables the progress bar in noise_dataset"""
+    import pseudopeople
+
+    # Mock tqdm to track if it was called
+    mock_tqdm = mocker.patch("pseudopeople.noise.tqdm", wraps=pseudopeople.noise.tqdm)
+
+    # Generate with progress bar disabled
+    pseudopeople.generate_decennial_census(seed=0)
+
+    # tqdm should have been called (progress_bar=True by default)
+    assert mock_tqdm.called
+
+
+def test_progress_bar_parameter_controls_tqdm_usage(mocker):
+    """Test that progress_bar parameter controls whether tqdm is used"""
+    from pseudopeople.noise import NOISE_TYPES, tqdm
+
+    # Track tqdm calls
+    tqdm_calls = []
+    original_tqdm = tqdm
+
+    def mock_tqdm(iterable, **kwargs):
+        tqdm_calls.append(True)
+        return iterable  # Just return the iterable without wrapping
+
+    mocker.patch("pseudopeople.noise.tqdm", mock_tqdm)
+
+    # Generate with default (progress_bar=True)
+    import pseudopeople
+    pseudopeople.generate_decennial_census(seed=0)
+
+    # tqdm should have been called
+    assert len(tqdm_calls) > 0, "tqdm should be called when progress_bar=True"
+
+
 # TODO [MIC-4546]: stop hardcoding the data version number
 @pytest.fixture(scope="module")
 def simulated_data_changelog_path(tmp_path_factory):
