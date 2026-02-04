@@ -20,7 +20,7 @@ from layered_config_tree import LayeredConfigTree
 from pseudopeople.configuration import Keys
 from pseudopeople.entity_types import ColumnNoiseType, RowNoiseType
 from pseudopeople.noise_entities import NOISE_TYPES
-from pseudopeople.progressbar import progress_bar
+from pseudopeople.progressbar import tqdm
 from pseudopeople.schema_entities import COLUMNS, Dataset
 from pseudopeople.utilities import get_randomness_stream
 
@@ -59,12 +59,8 @@ def noise_dataset(
     missingness = (dataset_data == "") | (dataset_data.isna())
 
     if show_progress_bar:
-        noise_type_iterator = progress_bar(
-            NOISE_TYPES,
-            desc="Applying noise",
-            unit="type",
-            position=1,
-            leave=False,
+        noise_type_iterator = tqdm(
+            NOISE_TYPES, desc="Applying noise", unit="type", position=1, leave=False
         )
     else:
         noise_type_iterator = NOISE_TYPES

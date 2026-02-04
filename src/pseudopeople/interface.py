@@ -16,7 +16,7 @@ from pseudopeople.dtypes import DtypeNames
 from pseudopeople.exceptions import DataSourceError
 from pseudopeople.loader import load_standard_dataset
 from pseudopeople.noise import noise_dataset
-from pseudopeople.progressbar import progress_bar
+from pseudopeople.progressbar import tqdm
 from pseudopeople.schema_entities import COLUMNS, DATASETS, Dataset
 from pseudopeople.utilities import (
     PANDAS_ENGINE,
@@ -82,12 +82,7 @@ def _generate_dataset(
         # Iterate sequentially
         noised_dataset = []
         iterator = (
-            progress_bar(
-                data_file_paths,
-                desc="Noising data",
-                position=0,
-                leave=False,
-            )
+            tqdm(data_file_paths, desc="Noising data", position=0, leave=False)
             if len(data_file_paths) > 1
             else data_file_paths
         )
