@@ -153,7 +153,7 @@ def _generate_dataset(
                         dataset,
                         configuration_tree,
                         seed=f"{seed}_{partition_info['number'] if partition_info is not None else 1}",
-                        show_progress_bar=False,
+                        progress_bar=False,
                     ),
                     dataset,
                 ),
@@ -170,12 +170,12 @@ def _prep_and_noise_dataset(
     dataset: Dataset,
     configuration_tree: LayeredConfigTree,
     seed: Any,
-    show_progress_bar: bool = True,
+    progress_bar: bool = True,
 ) -> pd.DataFrame:
     data = _reformat_dates_for_noising(data, dataset)
     data = _clean_input_data(data, dataset)
     noised_data = noise_dataset(
-        dataset, data, configuration_tree, seed, show_progress_bar=show_progress_bar
+        dataset, data, configuration_tree, seed, progress_bar=progress_bar
     )
     noised_data = _extract_columns(dataset.columns, noised_data)
     return noised_data
