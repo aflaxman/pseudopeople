@@ -6,7 +6,6 @@ import pandas as pd
 from layered_config_tree import LayeredConfigTree
 from loguru import logger
 from packaging.version import parse
-from tqdm import tqdm
 
 from pseudopeople import __version__ as psp_version
 from pseudopeople.configuration import get_configuration
@@ -17,6 +16,7 @@ from pseudopeople.dtypes import DtypeNames
 from pseudopeople.exceptions import DataSourceError
 from pseudopeople.loader import load_standard_dataset
 from pseudopeople.noise import noise_dataset
+from pseudopeople.progressbar import progress_bar
 from pseudopeople.schema_entities import COLUMNS, DATASETS, Dataset
 from pseudopeople.utilities import (
     PANDAS_ENGINE,
@@ -82,7 +82,12 @@ def _generate_dataset(
         # Iterate sequentially
         noised_dataset = []
         iterator = (
-            tqdm(data_file_paths, desc="Noising data", leave=False)
+            progress_bar(
+                data_file_paths,
+                desc="Noising data",
+                position=0,
+                leave=False,
+            )
             if len(data_file_paths) > 1
             else data_file_paths
         )
@@ -153,7 +158,7 @@ def _generate_dataset(
                         dataset,
                         configuration_tree,
                         seed=f"{seed}_{partition_info['number'] if partition_info is not None else 1}",
-                        progress_bar=False,
+                        show_progress_bar=False,
                     ),
                     dataset,
                 ),
@@ -170,12 +175,12 @@ def _prep_and_noise_dataset(
     dataset: Dataset,
     configuration_tree: LayeredConfigTree,
     seed: Any,
-    progress_bar: bool = True,
+    show_progress_bar: bool = True,
 ) -> pd.DataFrame:
     data = _reformat_dates_for_noising(data, dataset)
     data = _clean_input_data(data, dataset)
     noised_data = noise_dataset(
-        dataset, data, configuration_tree, seed, progress_bar=progress_bar
+        dataset, data, configuration_tree, seed, show_progress_bar=show_progress_bar
     )
     noised_data = _extract_columns(dataset.columns, noised_data)
     return noised_data

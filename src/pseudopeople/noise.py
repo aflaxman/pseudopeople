@@ -16,11 +16,11 @@ from typing import Any
 
 import pandas as pd
 from layered_config_tree import LayeredConfigTree
-from tqdm import tqdm
 
 from pseudopeople.configuration import Keys
 from pseudopeople.entity_types import ColumnNoiseType, RowNoiseType
 from pseudopeople.noise_entities import NOISE_TYPES
+from pseudopeople.progressbar import progress_bar
 from pseudopeople.schema_entities import COLUMNS, Dataset
 from pseudopeople.utilities import get_randomness_stream
 
@@ -30,7 +30,7 @@ def noise_dataset(
     dataset_data: pd.DataFrame,
     configuration: LayeredConfigTree,
     seed: Any,
-    progress_bar: bool = True,
+    show_progress_bar: bool = True,
 ) -> pd.DataFrame:
     """
     Adds noise to the input dataset data. Noise functions are executed in the order
@@ -58,9 +58,13 @@ def noise_dataset(
     # except for the leave_blank kind which is special-cased below
     missingness = (dataset_data == "") | (dataset_data.isna())
 
-    if progress_bar:
-        noise_type_iterator = tqdm(
-            NOISE_TYPES, desc="Applying noise", unit="type", leave=False
+    if show_progress_bar:
+        noise_type_iterator = progress_bar(
+            NOISE_TYPES,
+            desc="Applying noise",
+            unit="type",
+            position=1,
+            leave=False,
         )
     else:
         noise_type_iterator = NOISE_TYPES
