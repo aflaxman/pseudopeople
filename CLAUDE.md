@@ -21,6 +21,8 @@ pseudopeople adds realistic noise to simulated population data. The public API i
 
 ## Testing
 
+To test in full:
+
 ```bash
 pip install -e .
 pytest tests/unit/
