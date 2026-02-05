@@ -25,7 +25,7 @@ To test in full:
 
 ```bash
 pip install -e .[test]
-pytest tests/unit/
+pytest --runslow
 ```
 
 Integration tests are skipped by default (require external data).
