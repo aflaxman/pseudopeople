@@ -28,4 +28,3 @@ pip install -e .[test]
 pytest --runslow
 ```
 
-Integration tests are skipped by default (require external data).
