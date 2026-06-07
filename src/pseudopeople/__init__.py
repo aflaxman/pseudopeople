@@ -19,3 +19,4 @@ from pseudopeople.interface import (
     generate_taxes_w2_and_1099,
     generate_women_infants_and_children,
 )
+from pseudopeople.modular import add_noise_to_names, noise_column, noise_dataframe

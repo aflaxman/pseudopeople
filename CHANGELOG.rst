@@ -1,3 +1,7 @@
+**1.3.0 - 06/07/26**
+
+ - Add modular noise API: add_noise_to_names, noise_column, and noise_dataframe for applying column noise to arbitrary lists, Series, and DataFrames
+
 **1.2.8 - 02/05/26**
 
  - automatically use pretty progress bars when run in Jupyter Notebook
